@@ -6,7 +6,7 @@
 Summary:	Lua module for text
 Name:		ghc-%{pkgname}
 Version:	0.2.1
-Release:	1
+Release:	2
 License:	MIT
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/hslua-module-text
