@@ -4,6 +4,7 @@
 #
 %define		pkgname	hslua-module-text
 Summary:	Lua module for text
+Summary(pl.UTF-8):	Moduł Lua do tekstu
 Name:		ghc-%{pkgname}
 Version:	0.2.1
 Release:	2
@@ -13,16 +14,29 @@ Group:		Development/Languages
 Source0:	http://hackage.haskell.org/package/%{pkgname}-%{version}/%{pkgname}-%{version}.tar.gz
 # Source0-md5:	d1adac4b2fb77447a48baf1b011d053f
 URL:		http://hackage.haskell.org/package/hslua-module-text
-BuildRequires:	ghc >= 6.12.3
-BuildRequires:	ghc-hslua
+BuildRequires:	ghc >= 7.8.1
+BuildRequires:	ghc-base >= 4.7
+BuildRequires:	ghc-base < 5
+BuildRequires:	ghc-bytestring >= 0.10.2
+BuildRequires:	ghc-bytestring < 0.11
+BuildRequires:	ghc-hslua >= 1.0.3
+BuildRequires:	ghc-hslua < 1.2
+BuildRequires:	ghc-text >= 1
+BuildRequires:	ghc-text < 1.3
 %if %{with prof}
-BuildRequires:	ghc-prof
-BuildRequires:	ghc-hslua-prof
+BuildRequires:	ghc-prof >= 7.8.1
+BuildRequires:	ghc-base-prof >= 4.7
+BuildRequires:	ghc-bytestring-prof >= 0.10.2
+BuildRequires:	ghc-hslua-prof >= 1.0.3
+BuildRequires:	ghc-text-prof >= 1
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires(post,postun):	/usr/bin/ghc-pkg
-Requires:	ghc-hslua
+Requires:	ghc-base >= 4.7
+Requires:	ghc-bytestring >= 0.10.2
+Requires:	ghc-hslua >= 1.0.3
+Requires:	ghc-text >= 1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -34,16 +48,22 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 UTF-8 aware subset of Lua's string module.
 
+%description -l pl.UTF-8
+Obsługujący UTF-8 podzbiór modułu Lua string.
+
 %package prof
 Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	ghc-hslua-prof
+Requires:	ghc-base-prof >= 4.7
+Requires:	ghc-bytestring-prof >= 0.10.2
+Requires:	ghc-hslua-prof >= 1.0.3
+Requires:	ghc-text-prof >= 1
 
 %description prof
-Profiling %{pkgname} library for GHC.  Should be installed when
-GHC's profiling subsystem is needed.
+Profiling %{pkgname} library for GHC. Should be installed when GHC's
+profiling subsystem is needed.
 
 %description prof -l pl.UTF-8
 Biblioteka profilująca %{pkgname} dla GHC. Powinna być zainstalowana
@@ -61,6 +81,7 @@ runhaskell Setup.hs configure -v2 \
 	--docdir=%{_docdir}/%{name}-%{version}
 
 runhaskell Setup.hs build
+
 runhaskell Setup.hs haddock --executables
 
 %install
@@ -91,7 +112,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog.md %{name}-%{version}-doc/*
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
+%attr(755,root,root) %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.a
 %exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
 
